@@ -9,8 +9,24 @@ import {
   TableRow,
   Typography,
 } from '@mui/material';
+import { useSelector } from 'react-redux';
 
-export default function ProductTable({ rows }) {
+export default function ProductTable() {
+  const rows = useSelector((state) => state.products.produtos);
+
+  const formatCurrency = (value) => {
+    const numericValue = Number(value);
+
+    if (Number.isNaN(numericValue)) {
+      return 'R$ 0,00';
+    }
+
+    return numericValue.toLocaleString('pt-BR', {
+      style: 'currency',
+      currency: 'BRL',
+    });
+  };
+
   return (
     <TableContainer component={Paper} elevation={3} sx={{ mt: 4 }}>
       <Typography variant="h5" component="h1" sx={{ p: 2 }}>
@@ -49,12 +65,7 @@ export default function ProductTable({ rows }) {
                 <TableCell>{row.dimensoes}</TableCell>
                 <TableCell>{row.volume}</TableCell>
                 <TableCell>{row.tipoRecipiente}</TableCell>
-                <TableCell>
-                  {Number(row.precoUnitario).toLocaleString('pt-BR', {
-                    style: 'currency',
-                    currency: 'BRL',
-                  })}
-                </TableCell>
+                <TableCell>{formatCurrency(row.precoUnitario)}</TableCell>
                 <TableCell>{row.marca}</TableCell>
                 <TableCell>{row.fornecedor}</TableCell>
                 <TableCell>{row.codigoBarras}</TableCell>

@@ -10,8 +10,25 @@ import {
   TextField,
   Typography,
 } from '@mui/material';
+import { useDispatch, useSelector } from 'react-redux';
+import { addProduct, clearForm, updateFormField } from '../store/productSlice.js';
 
-export default function ProductForm({ formData, onChange, onSubmit, onShow }) {
+export default function ProductForm() {
+  const dispatch = useDispatch();
+  const formData = useSelector((state) => state.products.form);
+
+  const handleChange = (event) => {
+    const { name, value } = event.target;
+    dispatch(updateFormField({ name, value }));
+  };
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+
+    dispatch(addProduct({ ...formData }));
+    dispatch(clearForm());
+  };
+
   return (
     <Paper elevation={3} sx={{ p: 4, width: '100%' }}>
       <Typography variant="h5" component="h1" gutterBottom>
@@ -20,14 +37,14 @@ export default function ProductForm({ formData, onChange, onSubmit, onShow }) {
 
       <Box
         component="form"
-        onSubmit={onSubmit}
+        onSubmit={handleSubmit}
         sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}
       >
         <TextField
           label="ID do Produto"
           name="idProduto"
           value={formData.idProduto}
-          onChange={onChange}
+          onChange={handleChange}
           fullWidth
           required
         />
@@ -36,7 +53,7 @@ export default function ProductForm({ formData, onChange, onSubmit, onShow }) {
           label="Nome do Produto"
           name="nomeProduto"
           value={formData.nomeProduto}
-          onChange={onChange}
+          onChange={handleChange}
           fullWidth
           required
         />
@@ -45,7 +62,7 @@ export default function ProductForm({ formData, onChange, onSubmit, onShow }) {
           label="Categoria do Produto"
           name="categoria"
           value={formData.categoria}
-          onChange={onChange}
+          onChange={handleChange}
           fullWidth
           required
         />
@@ -58,7 +75,7 @@ export default function ProductForm({ formData, onChange, onSubmit, onShow }) {
             name="unidade"
             value={formData.unidade}
             label="Unidade"
-            onChange={onChange}
+            onChange={handleChange}
           >
             <MenuItem value="">Selecione</MenuItem>
             <MenuItem value="UN">UN - Unidade</MenuItem>
@@ -74,7 +91,7 @@ export default function ProductForm({ formData, onChange, onSubmit, onShow }) {
           label="Peso"
           name="peso"
           value={formData.peso}
-          onChange={onChange}
+          onChange={handleChange}
           fullWidth
           placeholder="Ex.: 500"
           required
@@ -84,7 +101,7 @@ export default function ProductForm({ formData, onChange, onSubmit, onShow }) {
           label="Dimensões"
           name="dimensoes"
           value={formData.dimensoes}
-          onChange={onChange}
+          onChange={handleChange}
           fullWidth
           placeholder="Ex.: 20 x 10 x 5 cm"
           required
@@ -94,7 +111,7 @@ export default function ProductForm({ formData, onChange, onSubmit, onShow }) {
           label="Volume"
           name="volume"
           value={formData.volume}
-          onChange={onChange}
+          onChange={handleChange}
           fullWidth
           placeholder="Ex.: 250 ml"
         />
@@ -107,7 +124,7 @@ export default function ProductForm({ formData, onChange, onSubmit, onShow }) {
             name="tipoRecipiente"
             value={formData.tipoRecipiente}
             label="Tipo de Recipiente"
-            onChange={onChange}
+            onChange={handleChange}
           >
             <MenuItem value="">Selecione</MenuItem>
             <MenuItem value="Plástico">Plástico</MenuItem>
@@ -124,7 +141,7 @@ export default function ProductForm({ formData, onChange, onSubmit, onShow }) {
           name="precoUnitario"
           type="number"
           value={formData.precoUnitario}
-          onChange={onChange}
+          onChange={handleChange}
           fullWidth
           inputProps={{ step: '0.01', min: 0 }}
           required
@@ -134,7 +151,7 @@ export default function ProductForm({ formData, onChange, onSubmit, onShow }) {
           label="Marca"
           name="marca"
           value={formData.marca}
-          onChange={onChange}
+          onChange={handleChange}
           fullWidth
         />
 
@@ -142,7 +159,7 @@ export default function ProductForm({ formData, onChange, onSubmit, onShow }) {
           label="Fornecedor"
           name="fornecedor"
           value={formData.fornecedor}
-          onChange={onChange}
+          onChange={handleChange}
           fullWidth
         />
 
@@ -150,7 +167,7 @@ export default function ProductForm({ formData, onChange, onSubmit, onShow }) {
           label="Código de Barras"
           name="codigoBarras"
           value={formData.codigoBarras}
-          onChange={onChange}
+          onChange={handleChange}
           fullWidth
         />
 
@@ -159,7 +176,7 @@ export default function ProductForm({ formData, onChange, onSubmit, onShow }) {
           name="quantidadeEstoque"
           type="number"
           value={formData.quantidadeEstoque}
-          onChange={onChange}
+          onChange={handleChange}
           fullWidth
           inputProps={{ min: 0 }}
         />
@@ -168,7 +185,7 @@ export default function ProductForm({ formData, onChange, onSubmit, onShow }) {
           label="Descrição"
           name="descricao"
           value={formData.descricao}
-          onChange={onChange}
+          onChange={handleChange}
           fullWidth
           multiline
           rows={3}
@@ -176,10 +193,6 @@ export default function ProductForm({ formData, onChange, onSubmit, onShow }) {
 
         <Button type="submit" variant="contained" size="large">
           Salvar
-        </Button>
-
-        <Button type="button" variant="outlined" onClick={onShow} size="large">
-          Show
         </Button>
       </Box>
     </Paper>
